@@ -1,0 +1,2 @@
+<app-header (loginMode)="selectedMethod($event)"></app-header>
+<app-signup [loginMethod] ="selectedMode" *ngIf="showSignUp"></app-signup>

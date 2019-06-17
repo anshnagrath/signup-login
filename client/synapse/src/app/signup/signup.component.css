@@ -1,0 +1,26 @@
+.login-main{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin-top: 10%; 
+}
+ .full-width {
+     width: 100% !important;
+ } 
+ .my-form{
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+.main{
+    flex-wrap: wrap;
+} 
+.custom-forms{
+    padding: 20px 0px 0px 0px!important;
+}
+ mat-card{
+    min-width: 40%;
+}
+.custom-error{
+    padding: 10px 0px 10px 0px!important;
+}

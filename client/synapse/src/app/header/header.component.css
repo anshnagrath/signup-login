@@ -1,0 +1,10 @@
+.align-rightSignUp{
+    position: absolute !important;
+    right: 0px !important;
+    margin: 0;
+}
+.align-rightLogin{
+    position: absolute !important;
+    right: 70px !important;
+    margin: 0;
+}
