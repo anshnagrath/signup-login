@@ -10,6 +10,10 @@ import { FormControl, FormGroup,FormBuilder, ValidatorFn,Validators, AbstractCon
 export class SignupComponent  {
 @Input() loginMethod: string;
   signUpForm: FormGroup;
+  firstName :string;
+  lastName : string;
+  password : string;
+  email    : string;
   constructor(private fb:FormBuilder,public changeDetection:ChangeDetectorRef) {
    this.signUpForm  = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -30,4 +34,13 @@ export class SignupComponent  {
       return group.get('confirmPassword').setErrors({'matchPassword': true})
     }
   };
+  signUp(){
+    let obj={
+      firstName:this.firstName,
+      lastName:this.lastName, 
+      password:this.password, 
+      email : this.email    
+    }
+
+  }
 }
