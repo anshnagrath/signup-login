@@ -22,12 +22,13 @@
       <form class="my-form"  [formGroup]="signUpForm">
          <mat-form-field class="full-width">
           <mat-label>First Name</mat-label>
-          <input matInput placeholder="First name" name="fname"  formControlName="firstName" required  autocomplete="off" >
-          <mat-error class="error-message custom-error" *ngIf="signUpForm.get('firstName').hasError('required') &&  (signUpForm.get('firstName').dirty || signUpForm.get('firstName').touched  ) || signUpForm.get('firstName').hasError('minlength')">Name field is required and should have minimum 3 characters</mat-error>
+          <input matInput placeholder="First name" name="firstName"  formControlName="firstName" required  autocomplete="off" >
+          <mat-error [class.has-error]="!signUpForm.controls['firstName'].valid"
+          class="error-message custom-error" *ngIf="signUpForm.get('firstName').hasError('required') &&  (signUpForm.get('firstName').dirty || signUpForm.get('firstName').touched  ) || signUpForm.get('firstName').hasError('minlength')">Name field is required and should have minimum 3 characters</mat-error>
         </mat-form-field >
         <mat-form-field class="full-width custom-forms">
           <mat-label>Last Name</mat-label>
-          <input matInput placeholder="Last Name" name="lname" formControlName="lastName" required  autocomplete="off" >
+          <input matInput placeholder="Last Name" name="lastName" formControlName="lastName" required  autocomplete="off" >
           <mat-error class="error-message custom-error" *ngIf="signUpForm.get('lastName').hasError('required') &&  (signUpForm.get('lastName').dirty || signUpForm.get('lastName').touched  ) || signUpForm.get('lastName').hasError('minlength')">Name field is required and should have minimum 3 characters</mat-error>
         </mat-form-field>
       
@@ -38,16 +39,17 @@
         </mat-form-field>
         <mat-form-field class="full-width custom-forms">
           <mat-label>Password</mat-label>
-          <input matInput (input)="pass($event.target.value)" placeholder="Password" name="password"  formControlName="password" required  autocomplete="off" >
-          <mat-error class="error-message custom-error" *ngIf="signUpForm.get('password').hasError('minlength') || (signUpForm.get('password').dirty || signUpForm.get('password').touched  ) ">Password should be of 5 characters</mat-error>
-          <mat-error class="error-message custom-error" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').errors.pattern || (signUpForm.get('password').dirty || signUpForm.get('password').touched  )">Password must conntain a uppercase,a Lowercase and a special character </mat-error>
+          <input matInput  placeholder="Password" name="password"  formControlName="password" required  autocomplete="off" >
+          <mat-error class="error-message custom-error" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').hasError('minlength') || signUpForm.get('password').hasError('maxlength')">Password should be of 5 characters</mat-error>
+          <mat-error class="error-message custom-error" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').hasError('pattern')  ">Password must conntain a uppercase,a Lowercase and a special character </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width custom-forms">
             <mat-label>Confirm Password</mat-label >
-            <input matInput placeholder="Confirm Password" formControlName="confirmPassword" name="confirm Password" required  autocomplete="off" >
+            <input matInput placeholder="Confirm Password" formControlName="confirmPassword" name="confirmPassword" required  autocomplete="off" >
+            <mat-error class="error-message custom-error" *ngIf="signUpForm.get('confirmPassword').errors && signUpForm.get('confirmPassword').hasError('matchPassword') ">Please enter the same password</mat-error>
           </mat-form-field>
           <mat-card-actions align="center">
-            <button mat-raised-button color="primary">SignUp</button>
+            <button mat-raised-button [disabled]="signUpForm.invalid"color="primary">SignUp</button>
             </mat-card-actions>
       </form>
     </mat-card-content>

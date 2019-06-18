@@ -1,5 +1,5 @@
-import { Component,Input } from '@angular/core';
-import { FormControl, FormGroup,FormBuilder, Validators, AbstractControl} from '@angular/forms';
+import { Component,Input, ChangeDetectorRef } from '@angular/core';
+import { FormControl, FormGroup,FormBuilder, ValidatorFn,Validators, AbstractControl} from '@angular/forms';
 
 
 @Component({
@@ -9,22 +9,25 @@ import { FormControl, FormGroup,FormBuilder, Validators, AbstractControl} from '
 })
 export class SignupComponent  {
 @Input() loginMethod: string;
-  signUpForm: FormGroup
-  constructor(private fb:FormBuilder) {
-   this.signUpForm  = new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      lastName: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      email: new FormControl('', [Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
-     password: new FormControl('', [Validators.required,validators.minLength(5), Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{1,}$/)]),
-      confirmPassword: new FormControl('')
-    });
-   }
+  signUpForm: FormGroup;
+  constructor(private fb:FormBuilder,public changeDetection:ChangeDetectorRef) {
+   this.signUpForm  = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(3)]],
+      lastName: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['',[Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
+     password: ['', [Validators.required,Validators.minLength(5),Validators.maxLength(5), Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{1,}$/)]],
+      confirmPassword: ['', Validators.required],
+   }, {
+      validator: this.passwordMatchValidator
+    }
+   );
+  }
 
-pass(val){
-  let r = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{0,}$/g
-  console.log(r.test(val), this.signUpForm.get('password')))
+   passwordMatchValidator = (group: FormGroup) => {
+    const password = group.get('password').value;
+    const confirmPassword = group.get('confirmPassword').value;
+    if(password !== confirmPassword){ 
+      return group.get('confirmPassword').setErrors({'matchPassword': true})
+    }
+  };
 }
-
-
-}
-
