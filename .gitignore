@@ -6,8 +6,8 @@
 ../client/synapse/tmp
 ../client/synapse/out-tsc
 # dependencies
-../backend/node_modules
-../client/synapse/node_modules
+./backend/node_modules
+./client/synapse/node_modules
 
 # IDEs and editors
 ../client/synapse/.idea
