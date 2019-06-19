@@ -8,14 +8,16 @@ import { retry } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AppService {
+  //http error are handled in the interceptor
    baseUrl="http://localhost:3000/"
   constructor(private http: HttpClient, private snackbar: MatSnackBar) {
 
    }
- 
    signUp(signUpObject): Observable<any>{
-     //http error are handled in the interceptor
      return this.http.post(`${this.baseUrl}signup`, { user: signUpObject});
+   }
+   login(loginObject){
+    return this.http.post(`${this.baseUrl}signup`, {loginObject});
    }
   openSnackBar(message: any, action: any) {
     this.snackbar.open(message, action, {

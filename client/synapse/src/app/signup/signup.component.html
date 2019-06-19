@@ -1,19 +1,23 @@
 <div class="login-main" *ngIf="loginMethod === 'login' ">
   <mat-card>
-    <mat-card-header align="center">
-      <mat-card-title center> Login</mat-card-title>
+    <form   [formGroup]="loginForm">
+    <mat-card-header >
+      <mat-card-title > Login</mat-card-title>
     </mat-card-header>
     <mat-card-content class="main">
-      <mat-form-field class="full-width" layout="row">
-        <input matInput placeholder="Email">
+      <mat-form-field class="full-width" layout="row" autocomplete="off" >
+        <input formControlName="mail" [(ngModel)]="mail" matInput placeholder="Email" required>
+        <mat-error class="error-message custom-error" *ngIf="loginForm.get('mail').hasError('pattern') ">Please enter a proper email</mat-error>
       </mat-form-field>
-      <mat-form-field class="full-width">
-        <input matInput type="password" placeholder="password">
+      <mat-form-field class="full-width md-10">
+        <input  formControlName="pass" [(ngModel)]="pass" matInput type="password" autocomplete="off"  placeholder="password" required>
+        <mat-error class="error-message custom-error" *ngIf="loginForm.get('pass').hasError('minlength') || loginForm.get('pass').hasError('maxlength') ">invalid password length</mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions align="center">
-      <button mat-raised-button color="primary">Login</button>
+      <button [disabled]="loginForm.invalid" (click)="login()"   mat-raised-button color="primary">Login</button>
     </mat-card-actions>
+  </form>
   </mat-card>
 </div>
 <div class="login-main" *ngIf=" loginMethod === 'signup' ">
@@ -40,8 +44,8 @@
         <mat-form-field class="full-width custom-forms">
           <mat-label>Password</mat-label>
           <input matInput [(ngModel)]="password"  placeholder="Password" name="password"  formControlName="password" required  autocomplete="off" >
-          <mat-error class="error-message custom-error" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').hasError('minlength') || signUpForm.get('password').hasError('maxlength')">Password should be of 5 characters</mat-error>
-          <mat-error class="error-message custom-error" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').hasError('pattern')  ">Password must conntain a uppercase,a Lowercase and a special character </mat-error>
+          <mat-error class="error-message custom-error pd-0" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').hasError('minlength') || signUpForm.get('password').hasError('maxlength')">Password should be of 5 characters</mat-error>
+          <mat-error class="error-message custom-error  pd-0" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').hasError('pattern')  ">Password must conntain a uppercase,a Lowercase and a special character </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width custom-forms">
             <mat-label>Confirm Password</mat-label >

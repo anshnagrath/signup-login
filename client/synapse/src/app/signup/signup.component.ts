@@ -11,10 +11,13 @@ import { AppService } from '../app.service';
 export class SignupComponent  {
 @Input() loginMethod: string;
   signUpForm: FormGroup;
-  firstName :string;
-  lastName : string;
-  password : string;
-  email    : string;
+  firstName : string;
+  lastName  : string;
+  password  : string;
+  email     : string;
+  mail      : string;
+  pass      : string;
+  loginForm : FormGroup;
   constructor(private fb: FormBuilder, private appService: AppService) {
    this.signUpForm  = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -26,6 +29,11 @@ export class SignupComponent  {
       validator: this.passwordMatchValidator
     }
    );
+   this.loginForm  = this.fb.group({
+    mail: ['',[Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
+    pass: ['', [Validators.required,Validators.minLength(5),Validators.maxLength(5)]],
+    
+ });
   }
 
    passwordMatchValidator = (group: FormGroup) => {
@@ -44,10 +52,23 @@ export class SignupComponent  {
     }
     
     this.appService.signUp(obj).subscribe((data)=>{
-      if(data.statusCode ==200){
-        this.appService.openSnackBar("User Sucessfully Saved","Sucess")
+      if(data.status.code == 200){
+        this.appService.openSnackBar("An email has been sent to your mail id please check to confirm","Sucess")
       }else{
-        this.appService.openSnackBar("Error While Saving", "Error")
+        this.appService.openSnackBar("Error While Sigining you in", "Error")
+      }
+    })
+  }
+  login(){
+    let obj = {
+      email: this.mail,
+      pass: this.password
+    }
+    this.appService.login(obj).subscribe((data)=>{
+      if(data.status.code ==200){
+        this.appService.openSnackBar("User login sucessfull","Sucess")
+      }else{
+        this.appService.openSnackBar("Error While logging in", "Error")
       }
     })
   }

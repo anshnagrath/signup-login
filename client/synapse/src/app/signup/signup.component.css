@@ -12,6 +12,9 @@
     max-width: 500px;
     width: 100%;
   }
+  .md-10{
+      margin-top: 10px;
+  }
 .main{
     flex-wrap: wrap;
 } 
@@ -23,4 +26,7 @@
 }
 .custom-error{
     padding: 10px 0px 10px 0px!important;
+}
+.pd-0{
+    padding: 0px !important;
 }

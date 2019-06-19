@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HTTPStatus } from './http-error.interceptor';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'synapse';
+  loadinController: Observable<Boolean>;
+  constructor(private httpStatus: HTTPStatus){
+    this.loadinController = this.httpStatus.getHttpStatus();
+  }
 }

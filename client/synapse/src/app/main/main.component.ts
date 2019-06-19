@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTPStatus } from '../http-error.interceptor';
 import { Observable } from 'rxjs';
-import { MatSpinner } from '@angular/material';
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
