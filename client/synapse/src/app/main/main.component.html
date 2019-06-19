@@ -1,2 +1,3 @@
+<mat-spinner *ngIf="loadinController | async" mode="indeterminate" class="center-div" [diameter]="50"></mat-spinner>
 <app-header (loginMode)="selectedMethod($event)"></app-header>
 <app-signup [loginMethod] ="selectedMode" *ngIf="showSignUp"></app-signup>

@@ -1,5 +1,6 @@
-import { Component,Input, ChangeDetectorRef } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { FormControl, FormGroup,FormBuilder, ValidatorFn,Validators, AbstractControl} from '@angular/forms';
+import { AppService } from '../app.service';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class SignupComponent  {
   lastName : string;
   password : string;
   email    : string;
-  constructor(private fb:FormBuilder,public changeDetection:ChangeDetectorRef) {
+  constructor(private fb: FormBuilder, private appService: AppService) {
    this.signUpForm  = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
@@ -41,6 +42,13 @@ export class SignupComponent  {
       password:this.password, 
       email : this.email    
     }
-
+    
+    this.appService.signUp(obj).subscribe((data)=>{
+      if(data.statusCode ==200){
+        this.appService.openSnackBar("User Sucessfully Saved","Sucess")
+      }else{
+        this.appService.openSnackBar("Error While Saving", "Error")
+      }
+    })
   }
 }

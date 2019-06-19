@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
+import { HTTPStatus } from '../http-error.interceptor';
+import { Observable } from 'rxjs';
+import { MatSpinner } from '@angular/material';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -8,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 export class MainComponent implements OnInit {
   showSignUp: Boolean;
   selectedMode: string;
-  constructor() { }
+  loadinController: Observable<Boolean>;
+  constructor(private httpStatus: HTTPStatus) {
+    this.loadinController = this.httpStatus.getHttpStatus();
+    
+   }
 
   ngOnInit() {
   }

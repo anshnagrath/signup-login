@@ -11,6 +11,7 @@ app.use(cors());
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(logger('dev'));
 app.use(routes);
+app.use(cors());
 app.listen(process.env.PORT || 3000 , (err) => {
  if(!err) {
      log(`Server started at port  ${ process.env.PORT?process.env.PORT:'3000'}.`,true);

@@ -49,7 +49,7 @@
             <mat-error class="error-message custom-error" *ngIf="signUpForm.get('confirmPassword').errors && signUpForm.get('confirmPassword').hasError('matchPassword') ">Please enter the same password</mat-error>
           </mat-form-field>
           <mat-card-actions align="center">
-            <button mat-raised-button [disabled]="signUpForm.invalid"color="primary">SignUp</button>
+            <button mat-raised-button (click)="signUp();" [disabled]="signUpForm.invalid"color="primary">SignUp</button>
             </mat-card-actions>
       </form>
     </mat-card-content>

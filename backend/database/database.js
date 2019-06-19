@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import log from '../utility/chalk';
-const log = console.log;
-mongoose.connect('mongodb://localhost/devdb',{ useNewUrlParser: true }).catch((e)=>log(log(e,false)));
+mongoose.connect('mongodb://localhost/dbo',{ useNewUrlParser: true }).catch((e)=>log(log(e,false)));
 mongoose.connection.on('connected', function () {
     log('connected to database',true);
 });

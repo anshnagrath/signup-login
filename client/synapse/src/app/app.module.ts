@@ -9,7 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './signup/signup.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpErrorInterceptor } from './http-error.interceptor';
+import { HttpErrorInterceptor, HTTPStatus } from './http-error.interceptor';
+import { AppService } from './app.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +27,10 @@ import { HttpErrorInterceptor } from './http-error.interceptor';
     ReactiveFormsModule,
 
   ],
-  providers: [ {
+  providers: [ 
+    AppService,
+    HTTPStatus,
+    {
     provide: HTTP_INTERCEPTORS,
     useClass: HttpErrorInterceptor,
     multi: true

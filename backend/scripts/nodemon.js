@@ -1,7 +1,8 @@
 process.env.NODE_ENV = 'development';
 
 var nodemon = require('nodemon');
-nodemon('--exec babel-node ./server --watch ./server');
+nodemon('--exec babel-node ./server --watch  ./server');
+
 
 nodemon.on('start', function () {
     console.log('[nodemon] App has started');

@@ -1,8 +1,14 @@
 import  nodemailer  from 'nodemailer';
- sendmail=( reciever, subject, message ) => {
+import xoauth2 from 'xoauth2';
+import log from './chalk'
+import smtpTransport from 'nodemailer-smtp-transport';
+const sendmail=( reciever, subject, message ) => {
+
+    return new Promise((resolve,reject)=>{
+
+   
     reciever = reciever.toString(); 
     const mailContent = "<center><table class='body-wrap' style='text-align:center;width:96%;font-family:arial,sans-serif;border:12px solid rgba(126, 122, 122, 0.08);border-spacing:4px 20px;'>\
-            <tr><img src='https://s3.ap-south-1.amazonaws.com/lccbucket/logo.png' style='width:36%;'></tr>\
             <tr>\
                 <td>\
                     <center>\
@@ -20,38 +26,41 @@ import  nodemailer  from 'nodemailer';
             </tr>\
         </table></center>";
 
-        if(message.substring(0, 4) == "Dear")
-        mailContent = "<center><table class='body-wrap' style='text-align:center;width:96%;font-family:arial,sans-serif;border:12px solid rgba(126, 122, 122, 0.08);border-spacing:4px 20px;'>\
-            <tr><img src='https://s3.ap-south-1.amazonaws.com/lccbucket/logo.png' style='width:36%;'></tr>\
-        </table></center><br/>" + message;
-  
-    const smtpTransport = nodemailer.createTransport("SMTP", {
+       
+    const smtpTranspo = nodemailer.createTransport(smtpTransport( {
         service: 'gmail',
-        auth: {
+        host: 'smtp.gmail.com',
+        auth:{
+      
             user: "anshnagrath448@gmail.com", // Your gmail address.
-            pass: "wezzy33beat",
-        }
+              
+            pass: "kickass@305",
+    
 
-    });
+    }}));
   
     var mailOptions = {
         from: "anshnagrath448@gmail.com",
-        to: 'anshnagrath448@gmail.com',
+        to: reciever,
         subject: `Message from ${subject}`,
         generateTextFromHTML: true,
         html: mailContent
     }
   
-    smtpTransport.sendMail(mailOptions, function(error, response) {
-        smtpTransport.close();
+    smtpTranspo.sendMail(mailOptions, function(error, response) {
+        smtpTranspo.close();
         if(!error){
-            console.log(chalk.blue("email sucessesfullySend"));
-            return true
+            log("email sucessesfullySend",true);
+              resolve(true)
+            
         }else{
-            console.log(chalk.red("error while sending email"));
-            return false
+            log("error while sending email "+error,false);
+              resolve(false);
+            
         }
     });
+})
+
   }
 
 export default  sendmail;
