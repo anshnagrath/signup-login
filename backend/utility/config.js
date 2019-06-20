@@ -1,0 +1,3 @@
+const secret = {
+    "secret":"goodlife"
+}
