@@ -4,7 +4,8 @@ import log from '../utility/chalk';
 import mailer from '../utility/mail';
 import  bcrypt  from  'bcrypt';
 import jwt from 'jsonwebtoken';
-import {secret} from '../utility/config'
+import product from '../models/product';
+import {secret} from '../utility/config';
 import {alreadyVerified,mailString,mailErrorString} from '../public/htmlStrings/servehtml';
 
 class AuthController {
@@ -28,7 +29,7 @@ static async createUser(req, res) {
     res.status(400).send(responseObj(401,'error while saving',null))
   } 
  }else{
-  res.status(400).send(responseObj(402,'Please provide All the inputs',null))
+  res.status(500).send(responseObj(402,'Please provide All the inputs',null))
   }
 }
 static async authenticateUser(req, res) {
@@ -39,9 +40,9 @@ static async authenticateUser(req, res) {
       if(compare)  {
         const token = jwt.sign({ userId: user._id }, secret, { algorithm: 'RS256'})
         res.setHeader('x-access-token', token);
-        res.status(200).send(responseObj(200,'ok',true));
+        res.status(200).send(responseObj(200,'ok',user));
        } 
-       res.status(400).send(responseObj(400,'user not found',false)); 
+       res.status(500).send(responseObj(400,'user not found',null)); 
 
     }
    }
@@ -62,9 +63,28 @@ static async authenticateUser(req, res) {
   
       
       }else{
-        res.status(200).send(alreadyVerified);
+        res.status(500).send(alreadyVerified);
       }
      
+    }
+  }
+  static async addToProductList(req,res){
+    if(req.body.products && req.body.userId){
+      let currentUser = await user.findOneAndUpdate({_id:req.body.userID},{$set:{selectedProduct:req.body.products}},{new:true});
+         if(currentUser){
+           log("products Sucessfully Added",true);
+             res.status(200).send(responseObj(200,'ok',null)); 
+         }else{
+             res.status(500).send(responseObj(400,'ok',null)); 
+         }
+    }
+  }
+  static async getUserProducts(req,res){
+    if(req.params.userId){
+      let agregatedData = user.aggregate([
+        {$match:{_id:req.params.userId}},
+        // { $lookup: { from: "product",localField:'' } }
+      ])
     }
   }
  

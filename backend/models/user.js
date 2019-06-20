@@ -8,6 +8,6 @@ const userSchema = new Schema({
   password:{type:String,required:true },
   active:{type:Boolean,default:false},
   userHash:{type:String},
-  productIds:{type:Array}
+  selectedProduct:{type:Array}
 },{timestamps:true})
 export default model('user',userSchema);  

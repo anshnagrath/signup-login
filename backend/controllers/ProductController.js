@@ -15,7 +15,9 @@ static async getProducts(req, res) {
   }
 }
  static async getUserProducts(req,res){
-  
+  if(req.params.userId){
+    
+  }
   }
 }
 export default ProductController;
