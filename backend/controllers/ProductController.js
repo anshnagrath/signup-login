@@ -15,7 +15,7 @@ static async getProducts(req, res) {
   }
 }
  static async getUserProducts(req,res){
- // let  user
+  
   }
 }
 export default ProductController;
