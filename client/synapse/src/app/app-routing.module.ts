@@ -2,10 +2,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main/main.component';
-
+import { AuthGuardService as AuthGuard } from './auth-guard.service';
 const appRoutes: Routes = [
     { path: '', component: MainComponent, pathMatch: 'full'},
-    { path: 'login', loadChildren: '../app/login/login.module#LoginModule', pathMatch: 'full'}
+    { path: 'product', loadChildren: '../app/product/product.module#ProductModule',canActivate: [AuthGuard] , pathMatch: 'full'}
 ]
 
 

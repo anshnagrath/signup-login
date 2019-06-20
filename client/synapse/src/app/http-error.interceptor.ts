@@ -38,13 +38,23 @@ export class HTTPStatus {
             } else {
               // server-side error
               errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-              this.appService.openSnackBar('Server Unable to process request', 'Try again');
+              console.error(error.status)
+              if(error.status == 500) this.appService.openSnackBar('Server Unable to process request', 'Try again');
             }
             return throwError(errorMessage);
           }), tap(
         (event: any) => {
+        
           if (event instanceof HttpResponse) {
+            console.log(event.headers.get('x-access-token'),event,'eee')
               this.responseCounter = Number(this.responseCounter)+ Number(1);
+              console.log(event,event.headers.get('x-access-token'),'jwt',event.body.status.code)
+              if(request.url.includes("login") &&  event.body.status.code == 200){
+                localStorage.setItem("x-access-token",event.headers.get('x-access-token'));
+                localStorage.setItem("id",event.body.data[0].id);
+
+              }
+              
           }
 
         },

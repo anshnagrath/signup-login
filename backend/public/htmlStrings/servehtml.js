@@ -47,4 +47,4 @@ const mailString =
           </div>
       </html>
       `
-export default {alreadyVerified,mailString,mailErrorString}      
+export  {alreadyVerified,mailString,mailErrorString}      

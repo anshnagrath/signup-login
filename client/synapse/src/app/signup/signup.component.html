@@ -1,6 +1,6 @@
 <div class="login-main" *ngIf="loginMethod === 'login' ">
   <mat-card>
-    <form   [formGroup]="loginForm">
+    <form   [formGroup]="loginForm" #formDirective="ngForm" >
     <mat-card-header >
       <mat-card-title > Login</mat-card-title>
     </mat-card-header>
@@ -10,12 +10,14 @@
         <mat-error class="error-message custom-error" *ngIf="loginForm.get('mail').hasError('pattern') ">Please enter a proper email</mat-error>
       </mat-form-field>
       <mat-form-field class="full-width md-10">
-        <input  formControlName="pass" [(ngModel)]="pass" matInput type="password" autocomplete="off"  placeholder="password" required>
+          <i class="material-icons passwordIcon" (click)="toggleLoginInputType();" *ngIf ="loginEmailType == 'text'">visibility</i>
+          <i class="material-icons passwordIcon"  (click)="toggleLoginInputType();" *ngIf ="loginEmailType == 'password'" >visibility_off</i>
+        <input  formControlName="pass" [(ngModel)]="pass" [type]="loginEmailType" matInput type="password" autocomplete="off"  placeholder="password" required>
         <mat-error class="error-message custom-error" *ngIf="loginForm.get('pass').hasError('minlength') || loginForm.get('pass').hasError('maxlength') ">invalid password length</mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions align="center">
-      <button [disabled]="loginForm.invalid" (click)="login()"   mat-raised-button color="primary">Login</button>
+      <button [disabled]="loginForm.invalid" (click)="login(formDirective)"   mat-raised-button color="primary">Login</button>
     </mat-card-actions>
   </form>
   </mat-card>
@@ -43,7 +45,9 @@
         </mat-form-field>
         <mat-form-field class="full-width custom-forms">
           <mat-label>Password</mat-label>
-          <input matInput [(ngModel)]="password"  placeholder="Password" name="password"  formControlName="password" required  autocomplete="off" >
+          <i class="material-icons passwordIcon" (click)="toggleInputType();" *ngIf ="inputType == 'text'">visibility</i>
+          <i class="material-icons passwordIcon"  (click)="toggleInputType();" *ngIf ="inputType == 'password'" >visibility_off</i>
+          <input matInput [(ngModel)]="password"  placeholder="Password" name="password" [type]="inputType"  formControlName="password" required  autocomplete="off" >
           <mat-error class="error-message custom-error pd-0" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').hasError('minlength') || signUpForm.get('password').hasError('maxlength')">Password should be of 5 characters</mat-error>
           <mat-error class="error-message custom-error  pd-0" *ngIf="signUpForm.get('password').errors && signUpForm.get('password').hasError('pattern')  ">Password must conntain a uppercase,a Lowercase and a special character </mat-error>
         </mat-form-field>

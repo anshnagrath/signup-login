@@ -1,6 +1,8 @@
 import { Component,Input } from '@angular/core';
-import { FormControl, FormGroup,FormBuilder, ValidatorFn,Validators, AbstractControl} from '@angular/forms';
+import {  FormGroup,FormBuilder,Validators} from '@angular/forms';
 import { AppService } from '../app.service';
+import {Router} from '@angular/router';
+
 
 
 @Component({
@@ -10,6 +12,8 @@ import { AppService } from '../app.service';
 })
 export class SignupComponent  {
 @Input() loginMethod: string;
+  inputType:string="password";
+  loginEmailType:string="password"
   signUpForm: FormGroup;
   firstName : string;
   lastName  : string;
@@ -18,7 +22,7 @@ export class SignupComponent  {
   mail      : string;
   pass      : string;
   loginForm : FormGroup;
-  constructor(private fb: FormBuilder, private appService: AppService) {
+  constructor(private fb: FormBuilder, private appService: AppService,private router:Router) {
    this.signUpForm  = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
@@ -35,7 +39,20 @@ export class SignupComponent  {
     
  });
   }
-
+   toggleLoginInputType(){
+     if(this.loginEmailType=="password"){
+       this.loginEmailType="text"
+     }else if(this.loginEmailType=="text"){
+      this.loginEmailType="password"
+    }
+   }
+   toggleInputType(){
+    if(this.inputType=="password"){
+      this.inputType="text"
+    }else if(this.inputType=="text"){
+     this.inputType="password"
+   }
+  }
    passwordMatchValidator = (group: FormGroup) => {
     const password = group.get('password').value;
     const confirmPassword = group.get('confirmPassword').value;
@@ -52,24 +69,34 @@ export class SignupComponent  {
     }
     
     this.appService.signUp(obj).subscribe((data)=>{
-      if(data.status.code == 200){
+      if(data['status'].code == 200){
+        this.signUpForm.reset();
         this.appService.openSnackBar("An email has been sent to your mail id please check to confirm","Sucess")
-      }else{
+      }else if(data['status'].code == 400){
         this.appService.openSnackBar("Error While Sigining you in", "Error")
       }
     })
   }
-  login(){
+  login(formDirective){
     let obj = {
       email: this.mail,
-      pass: this.password
+      password: this.pass
     }
     this.appService.login(obj).subscribe((data)=>{
-      if(data.status.code ==200){
+      if(data['status'].code ==200){
+        formDirective.resetForm();
+        this.loginForm.reset();
+        
         this.appService.openSnackBar("User login sucessfull","Sucess")
-      }else{
-        this.appService.openSnackBar("Error While logging in", "Error")
+        this.router.navigate(["product"])
       }
+
+      if (data['status'].code ==  400){
+       this.appService.openSnackBar("Wrong Password", "Error")
+     }
+     else if (data['status'].code ==404){
+       this.appService.openSnackBar("email not active", "Error")
+     }
     })
   }
 }
