@@ -3,6 +3,9 @@ import  responseObj from '../utility/responseObject';
 import log from '../utility/chalk';
 import mailer from '../utility/mail';
 import  bcrypt  from  'bcrypt';
+import jwt from 'jsonwebtoken';
+import {secret} from '../utility/config'
+import {alreadyVerified,mailString,mailErrorString} from '../public/htmlStrings/servehtml';
 
 class AuthController {
 static async createUser(req, res) {
@@ -33,66 +36,19 @@ static async authenticateUser(req, res) {
     let user = await user.findOne({email:req.body.email}); 
     if(user.active  == true ){
       let compare = await bcrypt.compare(req.body.password , user.password);
-      if(compare)  res.status(200).send(responseObj(200,'ok',true));  
-      res.status(400).send(responseObj(400,'user not found',false)); 
+      if(compare)  {
+        const token = jwt.sign({ userId: user._id }, secret, { algorithm: 'RS256'})
+        res.setHeader('x-access-token', token);
+        res.status(200).send(responseObj(200,'ok',true));
+       } 
+       res.status(400).send(responseObj(400,'user not found',false)); 
 
     }
    }
   }
   static async verifyUser(req, res) {
     if(req.query && 'id' in req.query ){
-     
-  
       const userIdHash = req.query.id.toString();
-      const alreadyVerified =  `<!DOCTYPE html>
-      <script>
-      var iMyWidth;
-      var iMyHeight
-      iMyWidth = (window.screen.width/2) - (75 + 10);
-      iMyHeight = (window.screen.height/2) - (100 + 50);
-      var win2 = window.open("","Window2","status=no,height=200,width=150,resizable=yes,left=" + iMyWidth + ",top=" + iMyHeight + ",screenX=" + iMyWidth + ",screenY=" + iMyHeight + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
-       win2.document.write('<html><head><title>verification</title><body><div style="text-align: center"> <p>Already Registered</p></div></body></html>');
-   
-      </script>
-      <html>
-          <div style="text-align: center">
-              <p>you are already registered</p>
-          </div>
-      </html>
-      `
-      const mailString = 
-      `<!DOCTYPE html>
-      <script>
-      var iMyWidth;
-      var iMyHeight
-      iMyWidth = (window.screen.width/2) - (75 + 10);
-      iMyHeight = (window.screen.height/2) - (100 + 50);
-      var win2 = window.open("","Window2","status=no,height=200,width=150,resizable=yes,left=" + iMyWidth + ",top=" + iMyHeight + ",screenX=" + iMyWidth + ",screenY=" + iMyHeight + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
-       win2.document.write('<html><head><title>verification</title><body><div style="text-align: center"> <p>Your account has been activated</p></div></body></html>');
-   
-      </script>
-      <html>
-          <div style="text-align: center">
-              <p>You are Verified Please login to proceed</p>
-          </div>
-      </html>
-      `
-      const mailErrorString = `<!DOCTYPE html>
-      <script>
-      var iMyWidth;
-      var iMyHeight
-      iMyWidth = (window.screen.width/2) - (75 + 10);
-      iMyHeight = (window.screen.height/2) - (100 + 50);
-      var win2 = window.open("","","status=no,height=200,width=150,resizable=yes,left=" + iMyWidth + ",top=" + iMyHeight + ",screenX=" + iMyWidth + ",screenY=" + iMyHeight + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
-       win2.document.write('<html><head><title>verification</title><body><div style="text-align: center"> <p>Email Not verified Please try again</p></div></body></html>');
-   
-      </script>
-      <html>
-          <div style="text-align: center">
-              <p>You are not Verified Please try again</p>
-          </div>
-      </html>
-      `
       const isVerified = await user.findOne({userHash:userIdHash}).catch((e)=>{log(e,false)});
       if(!isVerified.active != true){
         const verifiedUser = await user.findOneAndUpdate({userHash:userIdHash},{"active":true},{new:true},{userHash:''}).catch((e)=>{log(e,false)});     

@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-mung": "^0.5.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.0",
     "morgan": "^1.9.1",
     "nodemailer": "^6.2.1",
