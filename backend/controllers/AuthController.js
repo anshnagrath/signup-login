@@ -5,6 +5,7 @@ import mailer from '../utility/mail';
 import  bcrypt  from  'bcrypt';
 import jwt from 'jsonwebtoken';
 import product from '../models/product';
+import mongoose from '../database/database'
 import secret from '../utility/config';
 import {alreadyVerified,mailString,mailErrorString} from '../public/htmlStrings/servehtml';
 
@@ -100,13 +101,25 @@ static async authenticateUser(req, res) {
     }
   }
   static async getUserProducts(req,res){
-    if(req.params.userId){
-      let agregatedData = user.aggregate([
-        {$match:{_id:req.params.userId}},
-        // { $lookup: { from: "product",localField:'' } }
-      ])
+    console.log("innnnnnnsid",req.params.id)
+    if(req.params.id){
+      let populateData = await user.findOne({"_id":mongoose.Types.ObjectId("5d0c56ffd329b86f33047d38")}).populate("selectedProduct")
+
+      let agregatedData = await user.aggregate([
+        {$match:{_id:mongoose.Types.ObjectId(req.params.id)}},
+        {$unwind:'$selectedProduct'},
+        { $lookup: {
+          from: "products",
+          localField: "selectedProduct",
+          foreignField: "_id",
+          as: "allProducts"
+       }}
+         ])
+      
+      console.log(agregatedData,populateData,"datatattatatat")
+    }
     }
   }
  
-}
+
 export default AuthController;

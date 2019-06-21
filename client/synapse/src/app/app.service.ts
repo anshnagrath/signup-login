@@ -44,7 +44,7 @@ export class AppService {
     return this.http.get(`${this.baseUrl}getproducts`);
   }
   getUserProducts(userId){
-    return this.http.get(`${this.baseUrl}getUserProducts/id:${userId}`);
+    return this.http.get(`${this.baseUrl}getuserproducts/${userId}`);
   }
   saveUserProducts(productObject) {
     return this.http.post(`${this.baseUrl}saveProducts`, {...productObject});
