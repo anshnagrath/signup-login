@@ -19,7 +19,7 @@ export class HeaderComponent  {
     this.router.navigate(['login']);
   }
   showUserItems(){
-    this.router.navigate(['item']);
+    this.router.navigate(['/product/item']);
   }
   
 

@@ -13,7 +13,7 @@ export class ProductComponent implements OnInit {
   allProducts;
   userProducts: Array<String> = [];
   constructor(public appService: AppService,public router:Router) {
-    this.router.navigate(['item'])
+   
    }
 
   ngOnInit() {
