@@ -18,7 +18,7 @@ static async createUser(req, res) {
 
   const userIdHash = await bcrypt.hash( userInstance._id.toString() ,10);
    userInstance['userHash'] = userIdHash;
-  const savedUser = await userInstance.save();
+  const savedUser = await userInstance.save().catch((e)=>{log(`Error while saving Data: ${e} `,false)});
   if(savedUser){
     log("user sucessfully saved " + req.protocol+req.get('host'),true); 
     const link = req.protocol+'://'+ req.get('host')+"/verify?id=" + userIdHash;
@@ -37,9 +37,9 @@ static async authenticateUser(req, res) {
   console.log("testtttt")
   if(req.body.loginObject.email && req.body.loginObject.password ){
     console.log("testtttt")
-    let currentUser = await user.findOne({email:req.body.loginObject.email}); 
+    let currentUser = await user.findOne({email:req.body.loginObject.email}).catch((e)=>{log(`Error while fetching user: ${e}`,false)}); 
     if(currentUser.active  == true ){
-      let compare = await bcrypt.compare(req.body.loginObject.password , currentUser.password);
+      let compare = await bcrypt.compare(req.body.loginObject.password , currentUser.password).catch((e)=>log(`Error whilecomparing the password:${e}`,false));
       if(compare)  {
           const token = jwt.sign({ userId: currentUser._id }, secret,{ expiresIn: '1h' })
         if(token){
@@ -90,7 +90,7 @@ static async authenticateUser(req, res) {
   }
   static async addToProductList(req,res){
     if(req.body.products && req.body.userId){
-      let currentUser = await user.findOneAndUpdate({_id:req.body.userId},{$addToSet:{selectedProduct:req.body.products}},{new:true});
+      let currentUser = await user.findOneAndUpdate({_id:req.body.userId},{$addToSet:{selectedProduct:req.body.products}},{new:true}).catch((e)=>{log(`Error while fetching ${e}`)});
       console.log(currentUser,"currentUser")
       if(currentUser){
            log("products Sucessfully Added",true);
@@ -101,22 +101,52 @@ static async authenticateUser(req, res) {
     }
   }
   static async getUserProducts(req,res){
-    console.log("innnnnnnsid",req.params.id)
+    
     if(req.params.id){
-      let populateData = await user.findOne({"_id":mongoose.Types.ObjectId("5d0c56ffd329b86f33047d38")}).populate("selectedProduct")
-
+    
       let agregatedData = await user.aggregate([
-        {$match:{_id:mongoose.Types.ObjectId(req.params.id)}},
-        {$unwind:'$selectedProduct'},
+        {
+          $match:{
+          _id:mongoose.Types.ObjectId(req.params.id)
+        }
+      },
+        {
+          $unwind:'$selectedProduct'
+        },
         { $lookup: {
           from: "products",
           localField: "selectedProduct",
           foreignField: "_id",
           as: "allProducts"
-       }}
-         ])
+       }},{
+         $project:{
+           'allProducts':1,
+           '_id':0
+         }
+       },{
+         $unwind:"$allProducts"
+
+       },{
+        $project:{
+          "brand":"$allProducts.brand",
+          "image":"$allProducts.image",
+          "name":"allProducts.name",
+         "price":"allProducts.price",
+         "shortDescription":"$allProducts.shortDescription",
+          "size":"$allProducts.size",
+        }
+       }
+         ]).catch((e)=>{log(e,false)})
       
-      console.log(agregatedData,populateData,"datatattatatat")
+
+      if(agregatedData){
+        log("Data aggregated",true);
+        res.status(200).send(responseObj(200,'ok',agregatedData)); 
+      }
+      
+    }else{
+      log("Please supply userId",false);
+      res.status(500).send(responseObj(400,'Please Provide user ID',null)); 
     }
     }
   }

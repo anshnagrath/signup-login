@@ -12,12 +12,14 @@ import { HttpErrorInterceptor, HTTPStatus } from './http-error.interceptor';
 import { AppService } from './app.service';
 import { AuthGuardService } from './auth-guard.service';
 import { JwtHelperService,JWT_OPTIONS } from '@auth0/angular-jwt';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    SignupComponent
+    SignupComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

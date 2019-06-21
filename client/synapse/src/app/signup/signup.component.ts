@@ -1,7 +1,8 @@
-import { Component,Input ,ChangeDetectorRef} from '@angular/core';
+import { Component, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import {  FormGroup,FormBuilder,Validators} from '@angular/forms';
 import { AppService } from '../app.service';
 import {Router,ActivatedRoute} from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 
@@ -10,10 +11,11 @@ import {Router,ActivatedRoute} from '@angular/router';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent  {
+export class SignupComponent implements OnDestroy {
+  subscription: Subscription;
   loginMethod: Boolean = true;
-  inputType:string="password";
-  loginEmailType:string="password"
+  inputType: string = 'password';
+  loginEmailType: string='password'
   signUpForm: FormGroup;
   firstName : string;
   lastName  : string;
@@ -71,7 +73,7 @@ export class SignupComponent  {
       email : this.email    
     }
     
-    this.appService.signUp(obj).subscribe((data)=>{
+   const signupSub = this.appService.signUp(obj).subscribe((data)=>{
       if(data['status'].code == 200){
         formDirective.resetForm();
         this.signUpForm.reset();
@@ -79,14 +81,15 @@ export class SignupComponent  {
       }else if(data['status'].code == 400){
         this.appService.openSnackBar("Error While Sigining you in", "Error")
       }
-    })
+    });
+    this.subscription.add(signupSub);
   }
   login(formDirective){
     let obj = {
       email: this.mail,
       password: this.pass
     }
-    this.appService.login(obj).subscribe((data)=>{
+   const loginSub = this.appService.login(obj).subscribe((data)=>{
       if(data['status'].code ==200){
         formDirective.resetForm();
         this.loginForm.reset();
@@ -102,5 +105,9 @@ export class SignupComponent  {
        this.appService.openSnackBar("email not active", "Error")
      }
     })
+    this.subscription.add(loginSub);
+  }
+  ngOnDestroy(){
+    (this.subscription)?this.subscription.unsubscribe() : '';
   }
 }

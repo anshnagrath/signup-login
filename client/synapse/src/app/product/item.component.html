@@ -1,1 +1,29 @@
-<p>csdcsd testxasxasxasxasx</p>
+<div *ngIf="userData && userData.length > 0 else nocontent">
+    <mat-card class="productItem" *ngFor="let user of userData" >
+    <div class="image">
+      <img width=100px height=100px  [src]="user.image"/>
+    </div>
+     <div style="display: inline-block;margin-left:50px">
+       <div>
+           <p>{{user.brand}}</p>
+       </div>  
+       <div>
+           <p>{{user.name}}</p>
+       </div> 
+       <div>
+           <p>{{user.shortDescription}}</p>
+       </div>
+       <div>
+           <p>{{user.price.cost}}</p>
+       </div>
+    </div>
+   
+    </mat-card>
+   
+  </div> 
+  <ng-template #nocontent>
+    <div>
+        <p>No Items selected</p>
+
+    </div>
+  </ng-template>

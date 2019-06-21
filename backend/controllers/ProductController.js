@@ -5,7 +5,7 @@ import log from '../utility/chalk';
 import  responseObj from '../utility/responseObject';
 class ProductController {
 static async getProducts(req, res) {
-  let products = await product.find({});
+  let products = await product.find({}).catch((e)=>{log(e,false)});
   if(products) {
     log("Products fected successfully",true);
     res.status(200).send(responseObj(200,"ok",products)); 
@@ -14,10 +14,6 @@ static async getProducts(req, res) {
     res.status(200).send(responseObj(500,"error",null)); 
   }
 }
- static async getUserProducts(req,res){
-  if(req.params.userId){
-    
-  }
-  }
+
 }
 export default ProductController;

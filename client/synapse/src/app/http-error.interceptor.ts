@@ -14,7 +14,7 @@ export class HTTPStatus {
   }
 
   getHttpStatus(): Observable<boolean> {
-    return this.showLoader;
+    return this.showLoader.asObservable();
   }
 }
 

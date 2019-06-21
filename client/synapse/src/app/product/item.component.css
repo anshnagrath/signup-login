@@ -1,0 +1,11 @@
+.image{
+    display: inline-block;
+}
+.content{
+    display: inline-block;
+    margin-left:50px
+}
+.nocontent{
+    text-align: center;
+    margin-top: 100px
+}

@@ -1,8 +1,5 @@
-<div id="overlay" *ngIf="loadinController | async" >
-    <div style="position:relative; top: 50%;left:50%;">
-        <mat-spinner  mode="indeterminate" class="center-div" [diameter]="50"></mat-spinner>
-    </div>
-</div>
+
+<app-loader *ngIf="loadinController" ></app-loader>
 <app-header ></app-header>
 <router-outlet></router-outlet>
 

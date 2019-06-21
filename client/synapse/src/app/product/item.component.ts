@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppService } from '../app.service';
+import { Subscriber, Subscription } from 'rxjs';
 
 
 
@@ -8,14 +9,18 @@ import { AppService } from '../app.service';
     templateUrl: './item.component.html',
     styleUrls: ['./item.component.css']
 })
-export class ItemComponent implements OnInit {
+export class ItemComponent implements OnInit,OnDestroy {
+    public userData;
+    private userProductSubscription: Subscription;
     constructor(private AppService: AppService){
-
     }
  async ngOnInit(){
      const userId = localStorage.getItem('id')
-    await this.AppService.getUserProducts(userId).subscribe((data)=>{
-        console.log(data,'dd')
+   this.userProductSubscription = await this.AppService.getUserProducts(userId).subscribe((data)=>{
+        this.userData = data['data']
     })
+ }
+ ngOnDestroy(){
+     (this.userProductSubscription)?this.userProductSubscription.unsubscribe():'';
  }  
 }

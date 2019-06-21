@@ -1,16 +1,21 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { HTTPStatus } from './http-error.interceptor';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  loadinController: Observable<Boolean>;
+export class AppComponent implements AfterViewInit {
+  loadinController: Subscription<Boolean>;
   constructor(private httpStatus: HTTPStatus){
-    sessionStorage.setItem('loggedIn', 'false');
-    this.loadinController = this.httpStatus.getHttpStatus();
+    sessionStorage.setItem('loggedIn', 'false'); 
+  }
+  ngAfterViewInit() {
+    this.httpStatus.getHttpStatus().pipe(delay(0)).subscribe((status)=>{
+      this.loadinController = status;
+    });
   }
 }
