@@ -1,7 +1,7 @@
-import { Component,Input } from '@angular/core';
+import { Component,Input ,ChangeDetectorRef} from '@angular/core';
 import {  FormGroup,FormBuilder,Validators} from '@angular/forms';
 import { AppService } from '../app.service';
-import {Router} from '@angular/router';
+import {Router,ActivatedRoute} from '@angular/router';
 
 
 
@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent  {
-@Input() loginMethod: string;
+  loginMethod: Boolean = true;
   inputType:string="password";
   loginEmailType:string="password"
   signUpForm: FormGroup;
@@ -22,8 +22,11 @@ export class SignupComponent  {
   mail      : string;
   pass      : string;
   loginForm : FormGroup;
-  constructor(private fb: FormBuilder, private appService: AppService,private router:Router) {
-   this.signUpForm  = this.fb.group({
+  constructor(private fb: FormBuilder, private appService: AppService, private router: Router, private activateRoutes: ActivatedRoute, private cd: ChangeDetectorRef) {
+    this.appService.loginStatus.subscribe((status) => {
+      this.loginMethod = status;
+    });
+    this.signUpForm  = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['',[Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
@@ -60,7 +63,7 @@ export class SignupComponent  {
       return group.get('confirmPassword').setErrors({'matchPassword': true})
     }
   };
-  signUp(){
+  signUp(formDirective){
     let obj={
       firstName:this.firstName,
       lastName:this.lastName, 
@@ -70,6 +73,7 @@ export class SignupComponent  {
     
     this.appService.signUp(obj).subscribe((data)=>{
       if(data['status'].code == 200){
+        formDirective.resetForm();
         this.signUpForm.reset();
         this.appService.openSnackBar("An email has been sent to your mail id please check to confirm","Sucess")
       }else if(data['status'].code == 400){

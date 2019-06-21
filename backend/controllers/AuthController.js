@@ -40,7 +40,7 @@ static async authenticateUser(req, res) {
     if(currentUser.active  == true ){
       let compare = await bcrypt.compare(req.body.loginObject.password , currentUser.password);
       if(compare)  {
-          const token = jwt.sign({ userId: currentUser._id }, secret)
+          const token = jwt.sign({ userId: currentUser._id }, secret,{ expiresIn: '1h' })
         if(token){
           res.setHeader('x-access-token', token);
           log("access granted",true); 
@@ -89,12 +89,13 @@ static async authenticateUser(req, res) {
   }
   static async addToProductList(req,res){
     if(req.body.products && req.body.userId){
-      let currentUser = await user.findOneAndUpdate({_id:req.body.userID},{$set:{selectedProduct:req.body.products}},{new:true});
-         if(currentUser){
+      let currentUser = await user.findOneAndUpdate({_id:req.body.userId},{$addToSet:{selectedProduct:req.body.products}},{new:true});
+      console.log(currentUser,"currentUser")
+      if(currentUser){
            log("products Sucessfully Added",true);
              res.status(200).send(responseObj(200,'ok',null)); 
          }else{
-             res.status(500).send(responseObj(400,'ok',null)); 
+             res.status(500).send(responseObj(400,'user not Found',null)); 
          }
     }
   }

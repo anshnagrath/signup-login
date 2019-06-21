@@ -10,6 +10,7 @@ import { HTTPStatus } from './http-error.interceptor';
 export class AppComponent {
   loadinController: Observable<Boolean>;
   constructor(private httpStatus: HTTPStatus){
+    sessionStorage.setItem('loggedIn', 'false');
     this.loadinController = this.httpStatus.getHttpStatus();
   }
 }

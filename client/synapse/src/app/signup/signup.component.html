@@ -1,4 +1,4 @@
-<div class="login-main" *ngIf="loginMethod === 'login' ">
+<div class="login-main" *ngIf="loginMethod">
   <mat-card>
     <form   [formGroup]="loginForm" #formDirective="ngForm" >
     <mat-card-header >
@@ -22,10 +22,10 @@
   </form>
   </mat-card>
 </div>
-<div class="login-main" *ngIf=" loginMethod === 'signup' ">
+<div class="login-main" *ngIf="!loginMethod">
   <mat-card>
     <mat-card-content>
-      <form class="my-form"  [formGroup]="signUpForm">
+      <form class="my-form"  [formGroup]="signUpForm" #formDirective="ngForm">
          <mat-form-field class="full-width">
           <mat-label>First Name</mat-label>
           <input [(ngModel)]="firstName" matInput placeholder="First name" name="firstName"  formControlName="firstName" required  autocomplete="off" >
@@ -57,7 +57,7 @@
             <mat-error class="error-message custom-error" *ngIf="signUpForm.get('confirmPassword').errors && signUpForm.get('confirmPassword').hasError('matchPassword') ">Please enter the same password</mat-error>
           </mat-form-field>
           <mat-card-actions align="center">
-            <button mat-raised-button (click)="signUp();" [disabled]="signUpForm.invalid"color="primary">SignUp</button>
+            <button mat-raised-button (click)="signUp(formDirective);" [disabled]="signUpForm.invalid"color="primary">SignUp</button>
             </mat-card-actions>
       </form>
     </mat-card-content>

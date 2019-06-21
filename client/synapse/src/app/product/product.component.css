@@ -1,0 +1,19 @@
+.productItem{
+    width: 200px;
+    margin-top: 50px;
+    margin-left: 31px;
+    display: inline-grid !important;
+}
+.custom-checkbox{
+    top: 10px;
+    right: 6px;
+    position: absolute;
+}
+.submit-button{
+    background: #3f51b5;
+    color: white;
+    margin: 40px 0px 40px 0px;
+    font-size: 21px;
+    border-radius: 26px;
+    padding: 10px 30px 10px 30px;
+}

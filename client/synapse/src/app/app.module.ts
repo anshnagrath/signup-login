@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule} from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { MainComponent } from './main/main.component';
 import { MaterialModule } from './material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './signup/signup.component';
@@ -13,11 +12,11 @@ import { HttpErrorInterceptor, HTTPStatus } from './http-error.interceptor';
 import { AppService } from './app.service';
 import { AuthGuardService } from './auth-guard.service';
 import { JwtHelperService,JWT_OPTIONS } from '@auth0/angular-jwt';
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    MainComponent,
     SignupComponent
   ],
   imports: [
@@ -33,7 +32,6 @@ import { JwtHelperService,JWT_OPTIONS } from '@auth0/angular-jwt';
     AuthGuardService,
     AppService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
- 
     JwtHelperService,
     HTTPStatus,
     {

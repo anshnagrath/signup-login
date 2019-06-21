@@ -1,3 +1,15 @@
-<p>
-  Product works!
-</p>
+<div>
+  <mat-card class="productItem" *ngFor="let product of allProducts;">
+      <mat-checkbox (input)="selectedProducts($event.target.checked,product._id)"   class="custom-checkbox"></mat-checkbox>
+    <img width=100px height=100px  [src]="product.image"/>
+    <div>
+    <p>{{product.brand}}</p>
+    <p>{{product.name}}</p>
+    <p>{{product.shortDescription}}</p>
+    <p>{{product.price.cost}}</p>
+    </div>
+  </mat-card>
+  <div align=center *ngIf="allProducts && allProducts.length >0">
+  <button mat-button (click)="submitProductList()" class="submit-button">Submit</button>
+  </div>
+</div> 

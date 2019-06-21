@@ -26,7 +26,11 @@ export class HTTPStatus {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.httpstatus.setHttpStatus(true)
       this.requestCounter = Number(this.requestCounter) + Number(1);
-      return next.handle(request)
+      const token = localStorage.getItem('x-access-token') ? localStorage.getItem('x-access-token') : '';
+      const authReq = request.clone({
+        headers: request.headers.set('x-access-token', token)
+      });
+      return next.handle(authReq)
         .pipe(
           retry(1),
           catchError((error: HttpErrorResponse) => {
@@ -44,7 +48,6 @@ export class HTTPStatus {
             return throwError(errorMessage);
           }), tap(
         (event: any) => {
-        
           if (event instanceof HttpResponse) {
             console.log(event.headers.get('x-access-token'),event,'eee')
               this.responseCounter = Number(this.responseCounter)+ Number(1);
