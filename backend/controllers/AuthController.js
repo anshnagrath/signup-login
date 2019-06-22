@@ -21,7 +21,7 @@ static async createUser(req, res) {
   const savedUser = await userInstance.save().catch((e)=>{log(`Error while saving Data: ${e} `,false)});
   if(savedUser){
     log("user sucessfully saved " + req.protocol+req.get('host'),true); 
-    const link = req.protocol+'://'+ req.get('host')+"/verify?id=" + userIdHash;
+    const link = req.protocol+'://'+ req.get('host')+"/api/verify?id=" + userIdHash;
     let mailStatus = await mailer(req.body.user.email,"confirmation of account",`Please click on the link to confirm the account ${link}`);
   
     mailStatus==true ? res.status(200).send(responseObj(200,'mailSent',null)): res.status(200).send(responseObj(400,'error while sending email',null))
