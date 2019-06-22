@@ -3,6 +3,7 @@ import AuthController from "../controllers/AuthController";
 import ProductController from "../controllers/ProductController"
 import checktoken from '../middlewares/authenticate'
 const router = express.Router();
+router.get('/',function(req,res){res.send("welcome to api")})
 router.post("/signup", AuthController.createUser);
 router.get("/verify", AuthController.verifyUser);
 router.post("/login", AuthController.authenticateUser);
