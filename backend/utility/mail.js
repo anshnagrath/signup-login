@@ -30,6 +30,7 @@ const sendmail=( reciever, subject, message ) => {
     const smtpTranspo = nodemailer.createTransport(smtpTransport( {
         service: 'gmail',
         host: 'smtp.gmail.com',
+        secure:false,
         auth:{
       
             user: "anshnagrath448@gmail.com", // Your gmail address.
