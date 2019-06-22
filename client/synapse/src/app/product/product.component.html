@@ -9,7 +9,7 @@
     <p>{{product.price.cost}}</p>
     </div>
   </mat-card>
-  <div align=center *ngIf="allProducts && allProducts.length >0">
+  <div align=center *ngIf="allProducts">
   <button mat-button (click)="submitProductList()" class="submit-button">Submit</button>
   </div>
 </div> 
