@@ -9,7 +9,7 @@ import { delay } from 'rxjs/operators';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
-  loadinController: Subscription<Boolean>;
+  loadinController;
   constructor(private httpStatus: HTTPStatus){
     sessionStorage.setItem('loggedIn', 'false'); 
   }
