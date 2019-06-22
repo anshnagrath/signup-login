@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AppService {
-   baseUrl="http://localhost:3000/";
+   baseUrl="http://13.233.164.239/api/";
     constructor(private http: HttpClient, private snackbar: MatSnackBar,public jwtHelper: JwtHelperService) {}
     loginStatus = new BehaviorSubject(true);
     isLoggedIn = new BehaviorSubject('false')
