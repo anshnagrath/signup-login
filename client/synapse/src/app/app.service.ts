@@ -11,7 +11,9 @@ export class AppService {
    baseUrl="http://13.233.164.239/api/";
     constructor(private http: HttpClient, private snackbar: MatSnackBar,public jwtHelper: JwtHelperService) {}
     loginStatus = new BehaviorSubject(true);
-    isLoggedIn = new BehaviorSubject('false')
+    isLoggedIn = new BehaviorSubject('false');
+    backbutton:Boolean = false;
+
     public isAuthenticated(): boolean {
     const token = localStorage.getItem('x-access-token');
     this.setHeaderType(!this.jwtHelper.isTokenExpired(token));
@@ -39,6 +41,12 @@ export class AppService {
       horizontalPosition: 'end'
 
     });
+  }
+  setBackButton(state: Boolean) {
+  this.backbutton  = state;
+  }
+  getBackButtonStatus(): Boolean {
+    return this.backbutton;
   }
   getAllProducts(){
     return this.http.get(`${this.baseUrl}getproducts`);

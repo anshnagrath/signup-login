@@ -82,7 +82,7 @@ export class SignupComponent implements OnDestroy {
         this.appService.openSnackBar("Error While Sigining you in", "Error")
       }
     });
-    this.subscription.add(signupSub);
+    // this.subscription.add(signupSub);
   }
   login(formDirective){
     let obj = {
@@ -105,7 +105,7 @@ export class SignupComponent implements OnDestroy {
        this.appService.openSnackBar("email not active", "Error")
      }
     })
-    this.subscription.add(loginSub);
+    // this.subscription.add(loginSub);
   }
   ngOnDestroy(){
     (this.subscription)?this.subscription.unsubscribe() : '';

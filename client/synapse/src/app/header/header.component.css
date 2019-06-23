@@ -13,3 +13,11 @@
     right: 10px !important;
     margin: 0;
 }
+.custom-button{
+    position: absolute;
+    right: 6px;
+}
+.logout{
+    position: absolute;
+    right: 100px;
+}

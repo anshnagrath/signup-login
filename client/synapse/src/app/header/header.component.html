@@ -1,6 +1,7 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <img *ngIf="loggedIn"  (click)="showUserItems()"   matTooltip="Click here to View All the Items"  src="https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/10_avatar-512.png" alt="Avatar" class="align-right-avatar" style="width:40px">
+    <button class="logout" *ngIf="loggedIn"  matTooltip="Logout"   (click)="logout()" mat-button>Logout</button>
+    <button class="custom-button" *ngIf="loggedIn"  matTooltip="Click here to View All the Items"   (click)="showUserItems()" mat-button>My Products</button>
     <button  *ngIf="!loggedIn"  class="align-rightLogin"   (click)="onLoginAndSignUp('login')" mat-button>Login</button>
     <button *ngIf="!loggedIn" class="align-rightSignUp" (click)="onLoginAndSignUp('signup')" mat-button>SignUp</button>
   </mat-toolbar-row>

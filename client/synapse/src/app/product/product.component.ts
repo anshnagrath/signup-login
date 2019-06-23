@@ -55,6 +55,9 @@ export class ProductComponent implements OnInit,OnDestroy {
   showUserProducts(){
     this.router.navigate(['item'])
   }
+  canDeactivate() {
+    return confirm('Are you sure you want to leave Hello ?');
+  }
   ngOnDestroy(){
     (this.subscriptions)?this.subscriptions.unsubscribe():'';
   }

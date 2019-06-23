@@ -1,21 +1,26 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+
 import { HTTPStatus } from './http-error.interceptor';
 import { delay } from 'rxjs/operators';
+import { PlatformLocation } from '@angular/common';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent  {
   loadinController;
-  constructor(private httpStatus: HTTPStatus){
+  constructor(private httpStatus: HTTPStatus,private location:PlatformLocation,private service:AppService){
     sessionStorage.setItem('loggedIn', 'false'); 
-  }
-  ngAfterViewInit() {
-    this.httpStatus.getHttpStatus().pipe(delay(0)).subscribe((status)=>{
+    this.httpStatus.getHttpStatus().pipe(delay(0)).subscribe((status) => {
       this.loadinController = status;
     });
+    this.location.onPopState((pop)=>{
+      this.service.setBackButton(true);
+    });
   }
+
 }

@@ -10,7 +10,14 @@ export class HTTPStatus {
    }
 
   setHttpStatus(inFlight: boolean) {
-    this.showLoader.next(inFlight);
+    if(inFlight === false){
+      setTimeout(()=>{
+        this.showLoader.next(inFlight);
+      },2000)
+    }else{
+
+      this.showLoader.next(inFlight);
+    }
   }
 
   getHttpStatus(): Observable<boolean> {

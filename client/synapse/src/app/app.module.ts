@@ -13,13 +13,18 @@ import { AppService } from './app.service';
 import { AuthGuardService } from './auth-guard.service';
 import { JwtHelperService,JWT_OPTIONS } from '@auth0/angular-jwt';
 import { LoaderComponent } from './loader/loader.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { CanDeactivateGuard } from './navigation-guard.service';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     SignupComponent,
-    LoaderComponent
+    LoaderComponent,
+    NotfoundComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +38,7 @@ import { LoaderComponent } from './loader/loader.component';
   providers: [ 
     AuthGuardService,
     AppService,
+    CanDeactivateGuard,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
     HTTPStatus,
@@ -41,6 +47,8 @@ import { LoaderComponent } from './loader/loader.component';
     useClass: HttpErrorInterceptor,
     multi: true
   }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [DialogComponent]
+
 })
 export class AppModule { }
