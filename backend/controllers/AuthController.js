@@ -130,8 +130,8 @@ static async authenticateUser(req, res) {
         $project:{
           "brand":"$allProducts.brand",
           "image":"$allProducts.image",
-          "name":"allProducts.name",
-         "price":"allProducts.price",
+          "name":"$allProducts.name",
+         "price":"$allProducts.price",
          "shortDescription":"$allProducts.shortDescription",
           "size":"$allProducts.size",
         }
