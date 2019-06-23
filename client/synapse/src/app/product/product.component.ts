@@ -43,8 +43,8 @@ export class ProductComponent implements OnInit,OnDestroy {
         if(data['status'].code === 200){
           this.appService.openSnackBar("products sucessfully saved","sucess")
         }
-      })
-      this.subscriptions.add(userSubcription)
+      },(err)=>{console.error(err)})
+      //this.subscriptions.add(userSubcription)
     }else{
       this.appService.loginStatus.next(false);
       this.appService.openSnackBar("Please Login Again to  continue","error")
