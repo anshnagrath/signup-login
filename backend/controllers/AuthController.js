@@ -15,10 +15,9 @@ static async createUser(req, res) {
   const hash = await bcrypt.hash( req.body.user.password ,10);
   req.body.user.password = hash;
   const userInstance = new user(req.body.user)
-
   const userIdHash = await bcrypt.hash( userInstance._id.toString() ,10);
    userInstance['userHash'] = userIdHash;
-  const savedUser = await userInstance.save().catch((e)=>{log(`Error while saving Data: ${e} `,false)});
+  const savedUser = await userInstance.findOneAndUpdate({email:req.body.user.email},{userInstance},{upsert:true,new:true}).catch((e)=>{log(`Error while saving Data: ${e} `,false)});
   if(savedUser){
     log("user sucessfully saved " + req.protocol+req.get('host'),true); 
     const link = req.protocol+'://'+ req.get('host')+"/api/verify?id=" + userIdHash;
