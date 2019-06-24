@@ -12,12 +12,14 @@ import {alreadyVerified,mailString,mailErrorString} from '../public/htmlStrings/
 class AuthController {
 static async createUser(req, res) {
  if(req.body && req.body.user.firstName && req.body.user.lastName && req.body.user.email&& req.body.user.password){
+  const alreadyPresent = await user.findOne({email:req.body.user.email})
+  if(!alreadyPresent){
   const hash = await bcrypt.hash( req.body.user.password ,10);
   req.body.user.password = hash;
   const userInstance = new user(req.body.user)
   const userIdHash = await bcrypt.hash( userInstance._id.toString() ,10);
    userInstance['userHash'] = userIdHash;
-  const savedUser = await userInstance.findOneAndUpdate({email:req.body.user.email},{userInstance},{upsert:true,new:true}).catch((e)=>{log(`Error while saving Data: ${e} `,false)});
+  const savedUser = await userInstance.save({userInstance}).catch((e)=>{log(`Error while saving Data: ${e} `,false)});
   if(savedUser){
     log("user sucessfully saved " + req.protocol+req.get('host'),true); 
     const link = req.protocol+'://'+ req.get('host')+"/api/verify?id=" + userIdHash;
@@ -31,6 +33,9 @@ static async createUser(req, res) {
  }else{
   res.status(500).send(responseObj(500,'Please provide All the inputs',null))
   }
+}else{
+  res.status(500).send(responseObj(406,'Already a user',null))
+}
 }
 static async authenticateUser(req, res) {
   console.log("testtttt")

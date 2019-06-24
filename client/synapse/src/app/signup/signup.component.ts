@@ -104,6 +104,9 @@ export class SignupComponent implements OnDestroy {
      else if (data['status'].code ==404){
        this.appService.openSnackBar("email not active", "Error")
      }
+      else if (data['status'].code == 406) {
+        this.appService.openSnackBar("Already a user", "Error")
+      }
     })
     // this.subscription.add(loginSub);
   }
