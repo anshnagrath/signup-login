@@ -66,6 +66,7 @@ export class ProductComponent implements OnInit,OnDestroy {
   }
   async canDeactivate() {
     if (this.appService.getBackButtonStatus()){
+      console.log(this.appService.getBackButtonStatus(),'statusssss')
     this.appService.setBackButton(false);
     const message = await this.showDialog();
     if(message){

@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
    baseUrl="http://13.233.164.239/api/";
-    constructor(private http: HttpClient, private snackbar: MatSnackBar,public jwtHelper: JwtHelperService) {}
+  constructor(private http: HttpClient, private router:Router ,private snackbar: MatSnackBar,public jwtHelper: JwtHelperService) {}
     loginStatus = new BehaviorSubject(true);
     isLoggedIn = new BehaviorSubject('false');
     backbutton:Boolean = false;
@@ -43,7 +44,9 @@ export class AppService {
     });
   }
   setBackButton(state: Boolean) {
-  this.backbutton  = state;
+    if (this.router.url !== '/product/item') {
+      this.backbutton  = state;
+    }
   }
   getBackButtonStatus(): Boolean {
     return this.backbutton;
