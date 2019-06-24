@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppService } from '../app.service';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
+import { HttpResponse } from '@angular/common/http';
 
 
 @Component({
@@ -12,17 +15,18 @@ import { Router } from '@angular/router';
 export class ProductComponent implements OnInit,OnDestroy {
   allProducts: Observable<any>;
   userProducts: Array<String> = [];
-  subscriptions: Subscription;
-  constructor(public appService: AppService,public router:Router) {
+  subscriptions: Array<Subscription> = [ ];
+  constructor(public appService: AppService, public router: Router, public matDialog: MatDialog) {
    
    }
 
   ngOnInit() {
-    this.subscriptions = this.appService.getAllProducts().subscribe((products) => {
+    const allProduct = this.appService.getAllProducts().subscribe((products: HttpResponse<any>) => {
       this.allProducts = products['data'];
     });
+    this.subscriptions.push(allProduct);
   }
-  selectedProducts(checkStatus, productId) {
+  selectedProducts(checkStatus: Boolean, productId: String) {
     if(checkStatus === true) {
       this.userProducts.push(productId) ;
     } else if (checkStatus === false && this.userProducts.indexOf(productId)) {
@@ -43,8 +47,8 @@ export class ProductComponent implements OnInit,OnDestroy {
         if(data['status'].code === 200){
           this.appService.openSnackBar("products sucessfully saved","sucess")
         }
-      },(err)=>{console.error(err)})
-      //this.subscriptions.add(userSubcription)
+      },(err)=>{console.error(err)});
+       (userSubcription) ? this.subscriptions.push(userSubcription):' '
     }else{
       this.appService.loginStatus.next(false);
       this.appService.openSnackBar("Please Login Again to  continue","error")
@@ -52,13 +56,31 @@ export class ProductComponent implements OnInit,OnDestroy {
     }
    
   }
+  showDialog(): Promise<Boolean>{
+    const dialogRef = this.matDialog.open(DialogComponent);
+   return  dialogRef.afterClosed().toPromise();
+   
+  }
   showUserProducts(){
     this.router.navigate(['item'])
   }
-  canDeactivate() {
-    return confirm('Are you sure you want to leave Hello ?');
+  async canDeactivate() {
+    if (this.appService.getBackButtonStatus()){
+    this.appService.setBackButton(false);
+    const message = await this.showDialog();
+    if(message){
+      localStorage.clear();
+      this.appService.setHeaderType('false');
+      this.appService.loginStatus.next(true);
+    }  
+    return message;
+  }else{
+    return true;
   }
+}
   ngOnDestroy(){
-    (this.subscriptions)?this.subscriptions.unsubscribe():'';
+    this.subscriptions.forEach((subscription)=>{
+      subscription.unsubscribe();
+    })
   }
 }

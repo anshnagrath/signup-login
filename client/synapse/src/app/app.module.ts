@@ -15,7 +15,6 @@ import { JwtHelperService,JWT_OPTIONS } from '@auth0/angular-jwt';
 import { LoaderComponent } from './loader/loader.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { CanDeactivateGuard } from './navigation-guard.service';
-import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,7 @@ import { DialogComponent } from './dialog/dialog.component';
     SignupComponent,
     LoaderComponent,
     NotfoundComponent,
-    DialogComponent
+ 
   ],
   imports: [
     BrowserModule,
@@ -48,7 +47,7 @@ import { DialogComponent } from './dialog/dialog.component';
     multi: true
   }],
   bootstrap: [AppComponent],
-  entryComponents: [DialogComponent]
+
 
 })
 export class AppModule { }

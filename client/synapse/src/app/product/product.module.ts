@@ -4,6 +4,7 @@ import { ProductComponent } from './product.component';
 import { ProductRoutingModule } from './product-routing.module';
 import { MaterialModule } from '../material/material.module';
 import { ItemComponent } from './item.component';
+import { DialogComponent } from '../dialog/dialog.component';
 
 
 
@@ -13,6 +14,7 @@ import { ItemComponent } from './item.component';
     ProductRoutingModule,
     MaterialModule
   ],
-  declarations: [ProductComponent, ItemComponent]
+  declarations: [ProductComponent, DialogComponent, ItemComponent],
+  entryComponents: [DialogComponent]
 })
 export class ProductModule { }
