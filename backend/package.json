@@ -11,7 +11,7 @@
   "author": "Ansh Nagrath <anshnagrath123@gmail.com>",
   "license": "IPC",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "chalk": "^2.4.2",
     "cors": "^2.8.5",
